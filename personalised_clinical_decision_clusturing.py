@@ -124,3 +124,49 @@ df['recommendation'] = df['cluster'].map(recommendations)
 
 # Show sample
 df[['cluster', 'result', 'recommendation']].head()
+
+!pip install gradio
+
+import numpy as np
+
+def cluster_and_recommend(age, gender, heart_rate, sbp, dbp, sugar, ckmb, troponin):
+    input_data = np.array([[age, gender, heart_rate, sbp, dbp, sugar, ckmb, troponin]])
+    scaled_input = scaler.transform(input_data)
+    cluster = kmeans.predict(scaled_input)[0]
+
+    recommendations = {
+    0: "Moderate risk. Monitor lifestyle and schedule periodic check-ups.",
+    1: "High risk! Immediate cardiology referral and diagnostic testing recommended."
+    }
+
+    return f"Cluster: {cluster}", f"Recommendation: {recommendations[cluster]}"
+
+import gradio as gr
+
+interface = gr.Interface(
+    fn=cluster_and_recommend,
+        inputs=[
+        gr.Number(label="Age"),
+        gr.Radio(choices=[0, 1], label="Gender (0: Female, 1: Male)"),
+        gr.Number(label="Heart Rate"),
+        gr.Number(label="Systolic BP"),
+        gr.Number(label="Diastolic BP"),
+…        )
+
+interface.launch()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
